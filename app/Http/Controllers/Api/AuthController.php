@@ -11,7 +11,7 @@ class AuthController extends Controller
     //
     public function register(Request $request)
     {
-        $validate = $request->validate([
+        $validated = $request->validate([
             'email' => 'required|email|unique:users',
             'password' => 'required|min:6',
             'gender' => 'required|in:male,female,other',
@@ -19,11 +19,11 @@ class AuthController extends Controller
 
         $user = User::create([
             'email' => $validated['email'],
-            'password' => bycrypt($validated['password']),
+            'password' => bcrypt($validated['password']),
             'gender' => $validated['gender'],
         ]);
 
-        $token = $user->createToken('api_token')->plainTextToken();
+        $token = $user->createToken('api_token')->plainTextToken;
         
         return response()->json([
             'message' => 'Success',
